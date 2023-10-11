@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+https://go.microsoft.com/fwlink/?LinkID=208121.
+-->
+<Project>
+  <PropertyGroup>
+    <_PublishTargetUrl>D:\Project\2023\SupplierControl\SupplierControl_Backend\SupplierControlBackend\bin\Release\net6.0\publish\</_PublishTargetUrl>
+    <History>True|2023-07-06T08:32:25.1429498Z;True|2023-07-06T15:03:51.6626267+07:00;True|2023-07-06T11:51:20.6946493+07:00;True|2023-07-05T17:12:26.6330420+07:00;True|2023-07-05T17:04:48.3110917+07:00;True|2023-07-05T16:53:40.1497162+07:00;True|2023-07-04T08:27:44.0012524+07:00;True|2023-07-03T16:03:02.9745641+07:00;True|2023-07-03T12:35:31.3941143+07:00;False|2023-07-03T12:34:11.7005706+07:00;True|2023-07-03T12:15:22.8492629+07:00;True|2023-07-03T12:03:43.0338636+07:00;True|2023-07-03T10:08:32.7793383+07:00;True|2023-07-03T08:54:21.3870469+07:00;True|2023-06-29T16:52:18.4233864+07:00;True|2023-06-09T17:36:15.5022625+07:00;True|2023-06-09T17:28:04.5757520+07:00;True|2023-06-08T13:56:44.8952359+07:00;</History>
+    <LastFailureDetails />
+  </PropertyGroup>
+</Project>

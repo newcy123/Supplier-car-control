@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "clQjYqfN81hJvhiNVfYbJ6rLSS24dG9+Y6mUD4QhFXU=",
+  "Source": "SupplierControlBackend",
+  "BasePath": "_content/SupplierControlBackend",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
