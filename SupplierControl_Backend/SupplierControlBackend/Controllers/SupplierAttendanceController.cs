@@ -57,7 +57,7 @@ namespace SupplierControlBackend.Controllers
                     deliverlyTotalEntryTime = ((int)(attendace.LeaveTime - attendace.EntryTime).Value.TotalMinutes / 60).ToString() + ":" + ((int)(attendace.LeaveTime - attendace.EntryTime).Value.TotalMinutes % 60).ToString(),
                     deliverlyStatusCal = (attendace.LeaveTime - attendace.EntryTime).Value.Hours < 0 ? false : true
 
-                }).ToList();
+                }).OrderByDescending(x => Convert.ToDateTime(x.deliverlyLeaveTime).ToString("hh:mm:ss")).ToList();
             #endregion
 
 

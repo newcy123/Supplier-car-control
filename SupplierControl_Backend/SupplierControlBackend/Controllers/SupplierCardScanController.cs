@@ -35,35 +35,36 @@ namespace SupplierControlBackend.Controllers
             DateTime end_shift_night = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 08, 00, 00, 00); ;
 
 
-            int currentDay = DateTime.Now.Day;
+            DateTime currentDay = DateTime.Now;
 
             // หน้า Attandance ดึงข้ัอมูลมาแสดง
             try { 
             #region// Attendance Table 
             var getAttendance = await _SuppilerDriverInOutContext.ScSuplierInOuts.ToListAsync();
-            var getAttendanceDataTable = (
+                var getAttendanceDataTable = (
 
-                from attendace in getAttendance
-                join company in _SuppilerDriverLisenseContext.ScSupplierDriverLisenses
-                on attendace.VenderCard equals company.DriverNbr
-                select new
-                {   
-                    deliverlyImage = company.DriverPicture,
-                    deliverlyCompany = company.VenderName,
-                    deliverlyRound = attendace.DeliveryRound,
-                    deliverlyName = company.Fname + " " + company.Surn,
-                    deliverlyNbr = company.DriverNbr,
-                    deliverlyExpire = company.DriverLicenceExpire,
-                    deliverlyDate = attendace.DeliveryDate,
-                    deliverlyShift = attendace.DeliveryShift,
-                    deliverlyEntryTime = attendace.EntryTime,
-                    deliverlyLeaveTime = attendace.LeaveTime,
-                    //deliverlyTotalEntryTime = (attendace.LeaveTime - attendace.EntryTime)
-                    deliverlyTotalEntryTime = ((int)(attendace.LeaveTime - attendace.EntryTime).Value.TotalMinutes / 60).ToString() + ":" + ((int)(attendace.LeaveTime - attendace.EntryTime).Value.TotalMinutes % 60).ToString(),
-                    deliverlyStatusCal = (attendace.LeaveTime - attendace.EntryTime).Value.Hours < 0 ? false : true
+                    from attendace in getAttendance
+                    join company in _SuppilerDriverLisenseContext.ScSupplierDriverLisenses
+                    on attendace.VenderCard equals company.DriverNbr
+                    select new
+                    {
+                        deliverlyImage = company.DriverPicture,
+                        deliverlyCompany = company.VenderName,
+                        deliverlyRound = attendace.DeliveryRound,
+                        deliverlyName = company.Fname + " " + company.Surn,
+                        deliverlyNbr = company.DriverNbr,
+                        deliverlyExpire = company.DriverLicenceExpire,
+                        deliverlyDate = attendace.DeliveryDate,
+                        deliverlyShift = attendace.DeliveryShift,
+                        deliverlyEntryTime = attendace.EntryTime,
+                        deliverlyLeaveTime = attendace.LeaveTime,
+                        //deliverlyTotalEntryTime = (attendace.LeaveTime - attendace.EntryTime)
+                        deliverlyTotalEntryTime = ((int)(attendace.LeaveTime - attendace.EntryTime).Value.TotalMinutes / 60).ToString() + ":" + ((int)(attendace.LeaveTime - attendace.EntryTime).Value.TotalMinutes % 60).ToString(),
+                        deliverlyStatusCal = (attendace.LeaveTime - attendace.EntryTime).Value.Hours < 0 ? false : true
 
 
-                }).Where(x=>x.deliverlyDate.Day == currentDay ).ToList();
+                    }).Where(x => x.deliverlyDate.ToString("ddMMyyyy") == currentDay.ToString("ddMMyyyy")).ToList();
+
                 return Ok(new
                 {
                     getAttendanceDataTable = getAttendanceDataTable,
@@ -85,7 +86,7 @@ namespace SupplierControlBackend.Controllers
         {
             try
             {
-                string vendercode = sc.Drivercard_Nbr.Split('_')[1].ToString();
+                string vendercode = sc.Drivercard_Nbr.Split('_')[1].ToUpper().ToString();
                 int countCard = 0;
                 var getAttendance = await _SuppilerDriverInOutContext.ScSuplierInOuts.ToListAsync();
                 
@@ -103,7 +104,7 @@ namespace SupplierControlBackend.Controllers
                         deliverlyRound = attendace.DeliveryRound
                        
 
-                    }).Where(x => x.deliverlyVenderCode == vendercode && x.deliverlyDate.Day == DateTime.Now.Day).ToList();
+                    }).Where(x => x.deliverlyVenderCode == vendercode && x.deliverlyDate.Date == DateTime.Now.Date).ToList();
 
 
 
@@ -111,7 +112,7 @@ namespace SupplierControlBackend.Controllers
                 if (checkVendercode.Count > 0)
                 {
                     //เช็คบัตรและวันที่ปัจจุบัน
-                    var checkgetAttendance = await _SuppilerDriverInOutContext.ScSuplierInOuts.Where(x => x.VenderCard == sc.Drivercard_Nbr && x.DeliveryDate.Day == DateTime.Now.Day).ToListAsync();
+                    var checkgetAttendance = await _SuppilerDriverInOutContext.ScSuplierInOuts.Where(x => x.VenderCard == sc.Drivercard_Nbr.ToUpper() && x.DeliveryDate.Date == DateTime.Now.Date).ToListAsync();
                     // เช็ควันที่ว่าบริษัทนี้มีการออกไปหรือยัง
                     var supplierInOutTop1 = checkgetAttendance.Where(x => Convert.ToDateTime(x.LeaveTime).ToString("HH:mm:ss") == "00:00:00").OrderByDescending(x => x.DeliveryRound).Take(1).ToList();
                     countCard = checkVendercode.Count();
@@ -136,7 +137,7 @@ namespace SupplierControlBackend.Controllers
                             sc_inout.DeliveryDate = Convert.ToDateTime(DateTime.Now.ToString("yyyy-MM-dd"));
                             sc_inout.DeliveryRound = checkVendercode.Count + 1;
                             sc_inout.DeliveryShift = "D";
-                            sc_inout.VenderCard = sc.Drivercard_Nbr;
+                            sc_inout.VenderCard = sc.Drivercard_Nbr.ToUpper();
                             sc_inout.EntryTime = DateTime.Now;
                             sc_inout.LeaveTime = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0);
                             sc_inout.CreateBy = sc.Empcode;
@@ -166,7 +167,7 @@ namespace SupplierControlBackend.Controllers
                         sc_inout.DeliveryDate = Convert.ToDateTime(DateTime.Now.ToString("yyyy-MM-dd"));
                         sc_inout.DeliveryRound = countCard + 1;
                         sc_inout.DeliveryShift = "D";
-                        sc_inout.VenderCard = sc.Drivercard_Nbr;
+                        sc_inout.VenderCard = sc.Drivercard_Nbr.ToUpper();
                         sc_inout.EntryTime = DateTime.Now;
                         sc_inout.LeaveTime = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0);
                         sc_inout.CreateBy = sc.Empcode;

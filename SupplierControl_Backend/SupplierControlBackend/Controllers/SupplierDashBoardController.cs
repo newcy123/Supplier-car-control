@@ -27,6 +27,7 @@ namespace SupplierControlBackend.Controllers
         [Route("getAllSuppilerDashboard")]
         public async Task<IActionResult> getAll()
         {
+            int j = 0;
             DateTime start_shift_day = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 08, 00, 00, 00);
             DateTime end_shift_day = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 17, 45, 00, 00); ;
 
@@ -140,9 +141,9 @@ namespace SupplierControlBackend.Controllers
 
 
             #region donut dashboard
-            string[] donutCompany = new string[5];
-            decimal[] donutTimme = new decimal[5];
-            int j = 0;
+            string[] donutCompany = new string[findMaximumVenderEntryTimeTop5.Count];
+            decimal[] donutTimme = new decimal[findMaximumVenderEntryTimeTop5.Count];
+   
             foreach(var company in findMaximumVenderEntryTimeTop5)
             {
                 donutCompany[j] = company.deliverlyMaximumCompany;

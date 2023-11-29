@@ -104,24 +104,21 @@ namespace SupplierControlBackend.Controllers
         {
 
             string drvCard = "";
-            int getGenerateDriverCard =  _SuppilerDriverLisenseContext.ScSupplierDriverLisenses.Where(x => x.DriverNbr.Contains(vendercode)).Count() ;
-            
 
-            if(getGenerateDriverCard > 0)
+            int countDriverCard = _SuppilerDriverLisenseContext.ScSupplierDriverLisenses.Where(x=>x.VenderCode == vendercode).Count();
+            
+            if(countDriverCard > 0)
             {
-                 drvCard = "DRV" + "_" + vendercode + "_" + (getGenerateDriverCard + 1).ToString("D5");
+                string getGenerateDriverCard = _SuppilerDriverLisenseContext.ScSupplierDriverLisenses.Where(x => x.VenderCode.Contains(vendercode)).OrderByDescending(x => x.DriverNbr).FirstOrDefault().DriverNbr;
+                drvCard = "DRV" + "_" + vendercode.ToUpper() + "_" + (Convert.ToInt32(getGenerateDriverCard.Split('_')[2]) + 1).ToString("D5");
 
             }
             else
             {
-                 drvCard = "DRV" + "_" + vendercode + "_" + "00001";
+                drvCard = "DRV" + "_" + vendercode.ToUpper() + "_" + "00001";
+
 
             }
-
-
-
-
-
 
 
             return Ok(drvCard);

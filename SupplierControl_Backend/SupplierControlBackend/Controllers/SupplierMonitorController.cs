@@ -58,6 +58,8 @@ namespace SupplierControlBackend.Controllers
                 on attendace.VenderCard equals company.DriverNbr
                 select new
                 {   
+                    deliverlyName = company.Fname + " " + company.Surn,
+                    deliverlyTel = company.TcTel,
                     deliverlyCompnaycode = company.VenderCode,
                     deliverlyCompany = company.VenderName,
                     deliverlyNbr = company.DriverNbr,
@@ -72,14 +74,14 @@ namespace SupplierControlBackend.Controllers
                     deliverlyStatusCal = (attendace.LeaveTime - attendace.EntryTime).Value.Hours < 0 ? false : true,
                     deliverlyRound = attendace.DeliveryRound
 
-                }).Where(x => x.deliverlyDate.Month == currentOfMonth).ToList();
+                }).Where(x => x.deliverlyDate.Month == currentOfMonth).OrderByDescending(x=>Convert.ToDateTime(x.deliverlyLeaveTime).ToString("hh:mm:ss")).ToList();
             #endregion
 
 
             #region// supplier ที่อยู่นานที่สุด
-            var findMaximumVenderEntryTime = getAttendanceDataTable.GroupBy(x => new { x.deliverlyCompnaycode, x.deliverlyCompany, x.deliverlyShift })
+            var findMaximumVenderEntryTime = getAttendanceDataTable.GroupBy(x => new {  x.deliverlyCompnaycode, x.deliverlyCompany, x.deliverlyShift })
                                             .Select(MaximumVender => new
-                                            {
+                                            {   
                                                 deliverlyMaximumCompany = MaximumVender.FirstOrDefault().deliverlyCompany,
                                                 deliverlygetTotalHours = new TimeSpan(MaximumVender.Where(p => p.deliverlyStatusCal == true).Sum(p => p.deliverlyTotalEntryTime.Value.Ticks)),
                                                 //deliverlyMaximumEntryTime = new TimeSpan(MaximumVender.Where(p=>p.deliverlyStatusCal == true).Sum(p=>p.deliverlyTotalEntryTime.Value.Ticks))
